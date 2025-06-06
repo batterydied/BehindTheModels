@@ -1,4 +1,5 @@
 import numpy as np
+from asserts import asserts
 
 class LinearRegression():
     def __init__(self, learning_rate = 0.01, max_epochs = 100, treshold = 1e-6, batch_size = None):
@@ -10,8 +11,10 @@ class LinearRegression():
         self.batch_size = batch_size
 
     def fit(self, X_train, y_train):
+        asserts(X_train, y_train)
+        
         n_samples, n_features = X_train.shape
-        self.weights = np.random.randn(n_features)
+        self.weights = np.random.randn(n_features) #(n_features, )
 
         batch_size = self.batch_size if self.batch_size else n_samples
         previous_loss = float('-inf')
@@ -35,8 +38,9 @@ class LinearRegression():
                 self.weights -= update_w
                 self.bias -= update_b
 
-                error = samples @ self.weights + self.bias - true_vals
-                total_loss += np.sum(error ** 2)
+                error = samples @ self.weights + self.bias - true_vals #(batch_size, )
+        
+                total_loss += np.sum(error ** 2) #scalar
             
             epoch_loss = total_loss / n_samples
             if abs(epoch_loss - previous_loss) < self.treshold:
@@ -47,13 +51,13 @@ class LinearRegression():
     
     def gradient_descent(self, samples, true_vals):
         n_samples = samples.shape[0]
-        preds = samples @ self.weights + self.bias
-        error = preds - true_vals
+        preds = samples @ self.weights + self.bias #(batch_size, )
+        error = preds - true_vals #(batch_size, )
         #mse = np.mean(error ** 2)
         #print(f'MSE: {mse}')
-
-        dW = (2/n_samples) * samples.T @ error
-        dB = (2/n_samples) * np.sum(error)
+        
+        dW = (2/n_samples) * samples.T @ error #scalar
+        dB = (2/n_samples) * np.sum(error) #scalar
 
         return [dW, dB]
 
