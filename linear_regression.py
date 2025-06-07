@@ -2,7 +2,7 @@ import numpy as np
 from asserts import asserts
 
 class LinearRegression():
-    def __init__(self, learning_rate = 0.01, max_epochs = 100, treshold = 1e-6, batch_size = None):
+    def __init__(self, learning_rate = 0.01, max_epochs = 100, treshold = 1e-6, batch_size = 100):
         self.weights = None
         self.bias = 0
         self.learning_rate = learning_rate
